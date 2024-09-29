@@ -1,14 +1,14 @@
 terraform {
-    backend "s3" {
-        bucket = "terraform-states-bucket-yuliyakim"
-        key = "task1/terraform.tfstate"
-        region = "ap-south-1"
-        dynamodb_table = "terraform-lock-table"
-    }
+  backend "s3" {
+    bucket         = "terraform-states-bucket-yuliyakim"
+    key            = "task1/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "terraform-lock-table"
+  }
 }
 
 provider "aws" {
-  region = "ap-south-1" 
+  region = "ap-south-1"
 }
 
 resource "aws_iam_role" "github_actions_role" {
@@ -20,7 +20,7 @@ resource "aws_iam_role" "github_actions_role" {
       {
         Effect = "Allow"
         Principal = {
-          Service = "ecs-tasks.amazonaws.com" 
+          Service = "ecs-tasks.amazonaws.com"
         }
         Action = "sts:AssumeRole"
       }
@@ -38,11 +38,11 @@ resource "aws_iam_policy" "github_actions_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:*",         # Grant access to S3 bucket
-          "ec2:*",        # Grant access to EC2 actions (if necessary)
-          "iam:*"         # Grant access to IAM actions (if necessary)
+          "s3:*",  # Grant access to S3 bucket
+          "ec2:*", # Grant access to EC2 actions (if necessary)
+          "iam:*"  # Grant access to IAM actions (if necessary)
         ]
-        Resource = "*"
+        resource = "*"
       }
     ]
   })
