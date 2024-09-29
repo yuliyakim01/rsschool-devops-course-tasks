@@ -1,0 +1,78 @@
+name: Terraform Deployment
+
+on:
+  pull_request:
+    branches:
+      - main  # Replace with your default branch if different
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+
+jobs:
+  terraform-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.6  # Specify the Terraform version you want to use
+
+      - name: Format Terraform
+        run: terraform fmt -check -recursive  # Check Terraform formatting
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    needs: terraform-check  # Ensure this job runs after terraform-check
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.6
+
+      - name: Configure AWS Credentials
+        id: aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole  # Replace with your IAM role ARN
+          aws-region: ap-south-1  # Replace with your AWS region
+
+      - name: Terraform Init
+        run: terraform init  # Initialize Terraform
+
+      - name: Terraform Plan
+        run: terraform plan  # Create a plan for deployment
+
+  terraform-apply:
+    runs-on: ubuntu-latest
+    needs: terraform-plan  # Ensure this job runs after terraform-plan
+    if: github.event_name == 'push'  # Only run on push events
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Configure AWS Credentials
+        id: aws-credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole  # Replace with your IAM role ARN
+          aws-region: ap-south-1  # Replace with your AWS region
+
+      - name: Terraform Init
+        run: terraform init  # Initialize Terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve  # Apply the Terraform plan
