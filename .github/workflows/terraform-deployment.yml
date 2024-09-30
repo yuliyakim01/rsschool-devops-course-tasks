@@ -56,10 +56,10 @@ jobs:
           aws-region: ap-south-1 
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -chdir=task1
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -chdir=task1
 
   terraform-apply:
     runs-on: ubuntu-latest
@@ -81,11 +81,11 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole  
+          ##role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole  
           aws-region: ap-south-1  
 
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -chdir=task1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -chdir=task1 -auto-approve
