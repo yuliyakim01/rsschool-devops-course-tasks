@@ -31,7 +31,7 @@ jobs:
           terraform_version: 1.9.6
 
       - name: Format Terraform
-        run: terraform fmt -check -recursive
+        run: terraform fmt -check
 
   terraform-plan:
     runs-on: ubuntu-latest
@@ -55,14 +55,14 @@ jobs:
           ##role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole
           aws-region: ap-south-1 
 
-      - name: Initialize Terraform
+      - name: Terraform Init
         run: |
-            cd task1 
+            cd ../.. 
             terraform init
 
       - name: Terraform Plan
         run: |
-          cd task1
+          cd ../..
           terraform plan
 
   terraform-apply:
@@ -89,7 +89,7 @@ jobs:
           aws-region: ap-south-1  
 
       - name: Terraform Init
-        run: terraform init -chdir=task1
+        run: terraform init 
 
       - name: Terraform Apply
-        run: terraform apply -chdir=task1 -auto-approve
+        run: terraform apply -auto-approve
