@@ -103,11 +103,11 @@ jobs:
           aws-region: ap-south-1  
 
       - name: Terraform Init
-        run: 
+        run: |
           cd task1
           terraform init 
 
       - name: Terraform Apply
-        run: 
+        run: |
           cd task1
           terraform apply -auto-approve
