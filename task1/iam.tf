@@ -1,16 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket         = "terraform-states-bucket-yuliyakim"
-    key            = "task1/terraform.tfstate"
-    region         = "ap-south-1"
-    dynamodb_table = "terraform-lock-table"
-  }
-}
-
-provider "aws" {
-  region = "ap-south-1"
-}
-
 resource "aws_iam_role" "github_actions_role" {
   name = "GitHubActionsRole"
 
@@ -20,9 +7,9 @@ resource "aws_iam_role" "github_actions_role" {
       {
         Effect = "Allow"
         Principal = {
-          Service = "ecs-tasks.amazonaws.com"
+          "Federated" : aws_iam_openid_connect_provider.github.arn
         }
-        Action = "sts:AssumeRole"
+        Action = "sts:AssumeRoleWithWebIdentity"
       }
     ]
   })
@@ -38,11 +25,17 @@ resource "aws_iam_policy" "github_actions_policy" {
       {
         Effect = "Allow"
         Action = [
-          "s3:*",  # Grant access to S3 bucket
-          "ec2:*", # Grant access to EC2 actions (if necessary)
-          "iam:*"  # Grant access to IAM actions (if necessary)
+           
+          "ec2:*",
+          "route53:*" 
+          "s3:*",
+          "iam:*" 
+          "vpc:*"
+          "sqs:*"
+          "events:*" 
+          
         ]
-        resource = "*"
+        Resource = "*"
       }
     ]
   })
