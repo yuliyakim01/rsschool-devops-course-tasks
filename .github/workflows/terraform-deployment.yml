@@ -9,6 +9,20 @@ on:
       - main
 
 jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Print current working directory
+        run: pwd
+
+      - name: List all files in the root directory
+        run: ls -la
+
+      - name: List files in the task1 directory
+        run: ls -la task1 || echo "task1 directory not found"
 
   ## 1. Terraform Check
   terraform-check:
@@ -57,12 +71,12 @@ jobs:
 
       - name: Terraform Init
         run: |
-            cd ../../task1 
+            cd task1 
             terraform init
 
       - name: Terraform Plan
         run: |
-          cd ../../task1
+          cd task1
           terraform plan
 
   terraform-apply:
