@@ -1,18 +1,20 @@
 resource "aws_iam_role" "github_actions_role" {
   name = "GitHubActionsRole"
 
-  assume_role_policy = jsonencode({
+  assume_role_policy = <<EOF
+  {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Principal = {
+        "Effect" = "Allow"
+        "Principal" = {
           "Federated" : aws_iam_openid_connect_provider.github.arn
         }
         Action = "sts:AssumeRoleWithWebIdentity"
       }
     ]
-  })
+  }
+  EOF
 }
 
 resource "aws_iam_policy" "github_actions_policy" {
@@ -27,12 +29,12 @@ resource "aws_iam_policy" "github_actions_policy" {
         Action = [
            
           "ec2:*",
-          "route53:*" 
+          "route53:*",
           "s3:*",
-          "iam:*" 
-          "vpc:*"
-          "sqs:*"
-          "events:*" 
+          "iam:*",
+          "vpc:*",
+          "sqs:*",
+          "events:*",
           
         ]
         Resource = "*"
