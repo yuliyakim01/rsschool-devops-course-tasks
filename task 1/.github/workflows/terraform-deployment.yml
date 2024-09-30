@@ -55,11 +55,15 @@ jobs:
           ##role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole
           aws-region: ap-south-1 
 
-      - name: Terraform Init
-        run: terraform init -chdir=task1
+      - name: Initialize Terraform
+        run: |
+            cd task1 
+            terraform init
 
       - name: Terraform Plan
-        run: terraform plan -chdir=task1
+        run: |
+          cd task1
+          terraform plan
 
   terraform-apply:
     runs-on: ubuntu-latest
