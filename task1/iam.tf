@@ -3,14 +3,14 @@ resource "aws_iam_role" "github_actions_role" {
 
   assume_role_policy = <<EOF
   {
-    Version = "2012-10-17"
-    Statement = [
+    "Version": "2012-10-17",
+    "Statement": [
       {
-        "Effect" = "Allow"
-        "Principal" = {
-          "Federated" : aws_iam_openid_connect_provider.github.arn
-        }
-        Action = "sts:AssumeRoleWithWebIdentity"
+        "Effect": "Allow",
+        "Principal": {
+          "Federated": "${aws_iam_openid_connect_provider.github.arn}"
+        },
+        "Action": "sts:AssumeRoleWithWebIdentity"
       }
     ]
   }
@@ -22,22 +22,30 @@ resource "aws_iam_policy" "github_actions_policy" {
   description = "Policy for GitHub Actions to manage Terraform resources"
 
   policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
+    "Version": "2012-10-17",
+    "Statement": [
       {
-        Effect = "Allow"
-        Action = [
-           
+        "Effect": "Allow",
+        "Action": [
           "ec2:*",
           "route53:*",
           "s3:*",
           "iam:*",
           "vpc:*",
           "sqs:*",
-          "events:*",
-          
-        ]
-        Resource = "*"
+          "events:*"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:DescribeTable"
+        ],
+        "Resource": "arn:aws:dynamodb:ap-south-1:396608786836:table/dynamodb-lock"
       }
     ]
   })

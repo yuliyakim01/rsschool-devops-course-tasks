@@ -11,6 +11,6 @@ terraform {
         key            = "terraform-state"
         region         = "ap-south-1"
         encrypt        = true
-        dynamodb_table = "dynamodb-lock"
+        dynamodb_table = "terraform-lock-table"
     }
 }
