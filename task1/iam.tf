@@ -1,3 +1,7 @@
+data "aws_iam_openid_connect_provider" "github" {
+  url            = "https://token.actions.githubusercontent.com"
+}
+
 resource "aws_iam_role" "github_actions_role" {
   name = "GitHubActionsRole"
 
@@ -8,14 +12,21 @@ resource "aws_iam_role" "github_actions_role" {
       {
         "Effect": "Allow",
         "Principal": {
-          "Federated": "${aws_iam_openid_connect_provider.github.arn}"
+          "Federated": "${data.aws_iam_openid_connect_provider.github.arn}"
         },
-        "Action": "sts:AssumeRoleWithWebIdentity"
+        "Action": "sts:AssumeRoleWithWebIdentity",
+        "Condition": {
+          "StringEquals": {
+            "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+            "token.actions.githubusercontent.com:sub": "repo:yuliyakim01/https://github.com/yuliyakim01/rsschool-devops-course-tasks.git:ref:refs/heads/task1"
+          }
+        }
       }
     ]
   }
   EOF
 }
+
 
 resource "aws_iam_policy" "github_actions_policy" {
   name        = "GitHubActionsPolicy"
@@ -43,9 +54,9 @@ resource "aws_iam_policy" "github_actions_policy" {
           "dynamodb:PutItem",
           "dynamodb:GetItem",
           "dynamodb:DeleteItem",
-          "dynamodb:DescribeTable"
+          "dynamodb:Scan"
         ],
-        "Resource": "arn:aws:dynamodb:ap-south-1:396608786836:table/dynamodb-lock"
+        "Resource": "arn:aws:dynamodb:ap-south-1:396608786836:table/terraform-lock-table"
       }
     ]
   })

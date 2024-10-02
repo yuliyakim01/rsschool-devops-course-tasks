@@ -1,12 +1,12 @@
 resource "aws_s3_bucket" "terraform-state-bucket" {
-  bucket = "terraform-states-bucket-yuliyakim"
+  bucket = var.bucket_name
   versioning {
     enabled = true
   }
 
   tags = {
     Name = "Yuliya's Terraform State Bucket"
-    Environment = var.environment
+    Environment = "Dev"
   }
 
   server_side_encryption_configuration {
@@ -15,10 +15,6 @@ resource "aws_s3_bucket" "terraform-state-bucket" {
         sse_algorithm = "aws:kms"
       }
     }
-  }
-  
-  lifecycle {
-    prevent_destroy = true
   }
 }
 
