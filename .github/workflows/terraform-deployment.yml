@@ -52,12 +52,12 @@ jobs:
 
       - name: Terraform Init
         run: |
-            cd task1 
+            cd task2 
             terraform init
 
       - name: Terraform Plan
         run: |
-          cd task1
+          cd task2
           terraform plan
 
   terraform-apply:
@@ -84,10 +84,10 @@ jobs:
 
       - name: Terraform Init
         run: |
-          cd task1
+          cd task2
           terraform init 
 
       - name: Terraform Apply
         run: |
-          cd task1
+          cd task2
           terraform apply -auto-approve
