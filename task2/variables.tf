@@ -25,7 +25,12 @@ variable "private_subnet_cidr_1" {
     default = "10.0.3.0/24"
 }
 
-variable "private_subnet_cidr_1" {
+variable "private_subnet_cidr_2" {
     description = "CIDR block for the second private subnet"
     default = "10.0.4.0/24"
+}
+
+variable "key_name" {
+    description = "SSH key pair"
+    default = "my-key"
 }

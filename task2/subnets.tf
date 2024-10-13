@@ -1,7 +1,7 @@
 # creating public subnet 1
 resource "aws_subnet" "public_subnet_1" {
     # tells terraform to place subnet within a specific VPC, referencing the ID of the VPS created earlier
-    vpc_id = aws.vpc.k8s_vpc.id 
+    vpc_id = aws_vpc.k8s_vpc.id 
 
     # specifies IP address for subnet using CIDR
     cidr_block = var.public_subnet_cidr_1
@@ -21,7 +21,7 @@ resource "aws_subnet" "public_subnet_1" {
 
 # creating public subnet 2
 resource "aws_subnet" "public_subnet_2" {
-    vpc_id = aws.vpc.k8s_vpc.id 
+    vpc_id = aws_vpc.k8s_vpc.id
 
     # IP range is different from first subnet
     cidr_block = var.public_subnet_cidr_2 
@@ -34,9 +34,9 @@ resource "aws_subnet" "public_subnet_2" {
 
 # creating private subnet 1
 resource "aws_subnet" "private_subnet_1" {
-    vpc_id = aws.vpc.k8s_vpc.id
+    vpc_id = aws_vpc.k8s_vpc.id
     cidr_block = var.private_subnet_cidr_1 
-    availability_zone = "ap-south-1c"
+    availability_zone = "ap-south-1a"
     tags = {
         Name = "private_subnet_1"
     }
@@ -44,9 +44,9 @@ resource "aws_subnet" "private_subnet_1" {
 
 # creating private subnet 2
 resource "aws_subnet" "private_subnet_2" {
-    vpc_id = aws.vpc.k8s_vpc.id
+    vpc_id = aws_vpc.k8s_vpc.id
     cidr_block = var.private_subnet_cidr_2 
-    availability_zone = "ap-south-1d"
+    availability_zone = "ap-south-1b"
     tags = {
         Name = "private_subnet_2"
     }
