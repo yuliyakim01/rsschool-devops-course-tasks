@@ -1,29 +1,11 @@
 name: Terraform Deployment
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
-      - main
+      - task2
 
 jobs:
-  terraform:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-
-      - name: Print current working directory
-        run: pwd
-
-      - name: List all files in the root directory
-        run: ls -la
-
-      - name: List files in the task1 directory
-        run: ls -la task1 || echo "task1 directory not found"
-
   ## 1. Terraform Check
   terraform-check:
     runs-on: ubuntu-latest
@@ -42,7 +24,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.6
+          terraform_version: 1.9.7
 
       - name: Format Terraform
         run: terraform fmt -check
@@ -58,7 +40,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.6
+          terraform_version: 1.9.7
 
       - name: Configure AWS Credentials
         id: aws-credentials
@@ -66,18 +48,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole
-          role-session-name: GithubActionsRole
           aws-region: ap-south-1 
 
       - name: Terraform Init
         run: |
-            cd task1 
+            cd task2 
             terraform init
 
       - name: Terraform Plan
         run: |
-          cd task1
+          cd task2
           terraform plan
 
   terraform-apply:
@@ -92,7 +72,7 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.6 
+          terraform_version: 1.9.7 
 
       - name: Configure AWS Credentials
         id: aws-credentials
@@ -100,16 +80,14 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          role-to-assume: arn:aws:iam::396608786836:role/GitHubActionsRole
-          role-session-name: GithubActionsRole 
           aws-region: ap-south-1  
 
       - name: Terraform Init
         run: |
-          cd task1
+          cd task2
           terraform init 
 
       - name: Terraform Apply
         run: |
-          cd task1
+          cd task2
           terraform apply -auto-approve
